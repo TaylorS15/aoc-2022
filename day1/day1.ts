@@ -10,58 +10,44 @@ const input = fs.readFileSync("./day1/day1-input.txt").toString();
 const inputArr = input.split("\r\n");
 
 /*
-  Set elfs to nested number arrays
-  Set _elf to be a temporary number array
+  Set elfs to a number array of at least three numbers
+  Set elf to be a temporary number array
 */
-const elfs: number[][] = [];
-let _elf: number[] = [];
+type ElfArray = [number, number, number, ...number[]];
 
-inputArr.forEach((elf: string) => {
-	if (elf !== "") {
-		//Set the variable 'int' to the parsed number value of elf
-		let int = +elf;
+let elfs: ElfArray = [0, 0, 0];
+let elf: number[] = [];
 
-		//push that int value to _elf
-		_elf.push(int);
+inputArr.forEach((calorie: string) => {
+	if (calorie !== "") {
+		//Set the variable 'int' to the parsed number value of calorie
+		let int = +calorie;
+
+		//push that int value to elf
+		elf.push(int);
 	} else {
-		//if elf is an empty string then push elf to elfs as its own number array, then clear _elf
-		elfs.push(_elf);
-		_elf = [];
+		//If calorie is an empty string then reduce elf to its total of all values and push total to elfs
+		elfs.push(elf.reduce((partialSum, acc) => partialSum + acc, 0));
+
+		//Then clear elf array
+		elf = [];
 	}
 });
 
-//Initially set the highestCalories variable to 0
-let highestCalories: number = 0;
-let threeHighestCalories: number[] = [0, 0, 0];
+//Part One Answer: Find the highest calorie value in array elfs then print that value
+const highestCalorie = Math.max(...elfs);
+console.log(highestCalorie);
 
-elfs.forEach((elf) => {
-	//Reduce each elf array to the sum of its values as elfCalories
-	let elfCalories = elf.reduce((partialSum, acc) => partialSum + acc, 0);
+//Compare function to sort an array from greatest to least
+const compareValues = (a: number, b: number): number => {
+	return b - a;
+};
 
-	//Setting highestCalories to new value if its bigger than initial value
-	if (elfCalories > highestCalories) {
-		highestCalories = elfCalories;
-	}
+//sort elfs from greatest to least
+elfs.sort(compareValues);
 
-	switch (elfCalories) {
-		case elfCalories >= threeHighestCalories[0] ? elfCalories : false:
-			threeHighestCalories[0] = elfCalories;
-			break;
-		case elfCalories >= threeHighestCalories[1] ? elfCalories : false:
-			threeHighestCalories[1] = elfCalories;
-			break;
-		case elfCalories >= threeHighestCalories[2] ? elfCalories : false:
-			threeHighestCalories[2] = elfCalories;
-			break;
-	}
-});
+//Set topThreeValues to the sum of the first three values of elfs after being sorted
+let topThreeValues = elfs[0] + elfs[1] + elfs[2];
 
-//Prints answer to part one
-console.log(highestCalories);
-
-let threeHighestCaloriesTotal = threeHighestCalories.reduce(
-	(partialSum, acc) => partialSum + acc,
-	1
-);
-
-console.log(threeHighestCaloriesTotal);
+//Part Two Answer: Print topThreeValues
+console.log(topThreeValues);
