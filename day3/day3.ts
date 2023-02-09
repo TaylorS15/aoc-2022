@@ -106,4 +106,33 @@ for (let i = 0; i <= 99; i++) {
 	groupOfThree = [];
 }
 
-groupsOfThree.forEach((array) => {});
+let duplicateLetters: string[] = [];
+
+groupsOfThree.forEach((array) => {
+	let tempArr1 = array[1].split("");
+	let tempArr2 = array[2].split("");
+
+	let duplicateLetter: string;
+
+	array[0].split("").forEach((letter) => {
+		if (tempArr1.includes(letter) && tempArr2.includes(letter)) {
+			if (!duplicateLetter) {
+				duplicateLetter = letter;
+				duplicateLetters.push(letter);
+			}
+		}
+	});
+});
+
+let sumOfPriorityValues1 = 0;
+
+duplicateLetters.forEach((letter) => {
+	priorityValues.find((value, index) => {
+		//For each duplicate letter find its corresponding index value in priorityValues and add it to sumOfPriorityValues
+		if (letter === value) {
+			sumOfPriorityValues1 += index + 1;
+		}
+	});
+});
+
+console.log(duplicateLetters.length, sumOfPriorityValues1);
